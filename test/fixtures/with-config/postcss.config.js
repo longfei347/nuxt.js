@@ -6,12 +6,9 @@ module.exports = {
   plugins: {
     'postcss-import': {
       root: rootDir,
-      path: [
-        rootDir,
-        modulesDir
-      ]
+      path: [rootDir, modulesDir]
     },
     'postcss-url': {},
-    'postcss-cssnext': {}
+    'postcss-preset-env': {}
   }
 }

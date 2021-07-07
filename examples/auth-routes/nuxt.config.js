@@ -1,7 +1,7 @@
-const bodyParser = require('body-parser')
-const session = require('express-session')
+import bodyParser from 'body-parser'
+import session from 'express-session'
 
-module.exports = {
+export default {
   head: {
     title: 'Auth Routes',
     meta: [
@@ -10,13 +10,10 @@ module.exports = {
       { hid: 'description', content: 'Auth Routes example' }
     ]
   },
-  build: {
-    vendor: ['axios']
-  },
   /*
   ** Add server middleware
-  ** Nuxt.js uses `connect` module as server
-  ** So most of express middleware works with nuxt.js server middleware
+  ** Nuxt uses `connect` module as server
+  ** So most of express middleware works with nuxt server middleware
   */
   serverMiddleware: [
     // body-parser middleware

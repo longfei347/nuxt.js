@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h3 class="date">Jul 10, 2017</h3>
+    <h3 class="date">
+      Jul 10, 2017
+    </h3>
     <h1>Deep dive into the Ocean</h1>
     <div class="content">
       <img src="~/assets/img/swimmer.jpg">
@@ -9,8 +11,8 @@
       <h2>Another subtitle</h2>
       <ul>
         <li>Vue.js</li>
-        <li>Nuxt.js</li>
-        <li>= <3</li>
+        <li>Nuxt</li>
+        <li>= &lt;3</li>
       </ul>
     </div>
   </div>

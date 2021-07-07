@@ -1,37 +1,62 @@
-const path = require('path')
+import path from 'path'
+import compression from 'compression'
 
-module.exports = {
+export default {
+  mode: 'unknown',
   srcDir: __dirname,
+  server: {
+    port: 8000,
+    host: '0.0.0.0',
+    timing: {
+      total: true
+    }
+  },
+  vueMeta: {
+    ssrAppId: 'test-ssr-app-id'
+  },
   router: {
     base: '/test/',
     middleware: 'noop',
-    extendRoutes(routes) {
+    scrollBehavior (to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    },
+    extendRoutes (routes) {
       return [
         ...routes,
         {
           name: 'about-bis',
           path: '/about-bis',
-          component: '~/pages/about.vue'
+          component: '~/pages/about.vue',
+          meta: { text: 'test-meta' }
+        },
+        {
+          path: '/redirect/about-bis',
+          redirect: '/about-bis'
+        },
+        {
+          path: '/not-existed'
         }
       ]
     }
   },
-  modulesDir: [
-    path.join(__dirname, '..', '..', '..', 'node_modules')
-  ],
-  transition: 'test',
+  modulesDir: [path.join(__dirname, '..', '..', '..', 'node_modules')],
+  pageTransition: 'test',
   layoutTransition: 'test',
   loadingIndicator: 'circle',
-  offline: true,
+  extensions: 'ts',
   plugins: [
-    '~/plugins/test.js',
+    '~/plugins/test',
+    '~/plugins/doubled',
+    { src: '~/plugins/test.plugin', mode: 'abc' },
+    '~/plugins/test.client',
+    '~/plugins/test.server',
     { src: '~/plugins/only-client.js', ssr: false }
   ],
   loading: '~/components/loading',
   env: {
     bool: true,
     num: 23,
-    string: 'Nuxt.js',
+    string: 'Nuxt',
     object: {
       bool: false,
       string: 'ok',
@@ -42,32 +67,52 @@ module.exports = {
     }
   },
   build: {
-    // extractCSS: true,
     publicPath: '/orion/',
+    cssSourceMap: true,
+    parallel: true,
     analyze: {
       analyzerMode: 'disabled',
-      generateStatsFile: true
+      generateStatsFile: true,
+      logLevel: 'error'
     },
-    extend(config, options) {
+    styleResources: {
+      css: './assets/pre-process.css'
+    },
+    babel: {
+      presets ({ isServer }) {
+        return null // Coverage: Return null, so defaults will be used.
+      }
+    },
+    transpile: 'vue-test',
+    extend (config, options) {
       return Object.assign({}, config, {
-        devtool: 'nosources-source-map'
+        devtool: 'source-map'
       })
     }
   },
   css: [
-    { src: '~/assets/app.css' }
+    '~/assets/app.pcss',
+    '~/assets/app.sass'
   ],
   render: {
+    csp: true,
     http2: {
-      push: true
+      push: true,
+      shouldPush: (file, type) => type === 'script'
     },
+    asyncScripts: true,
     bundleRenderer: {
       shouldPreload: (file, type) => {
         return ['script', 'style', 'font'].includes(type)
       }
     },
+    compressor: function damn (...args) { return compression({ threshold: 9 })(...args) },
     static: {
       maxAge: '1y'
     }
+  },
+  globalName: 'noxxt',
+  globals: {
+    id: 'custom-nuxt-id'
   }
 }

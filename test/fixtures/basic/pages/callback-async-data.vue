@@ -4,9 +4,9 @@
 
 <script>
 export default {
-  async asyncData(context, callback) {
+  asyncData (context, callback) {
     setTimeout(function () {
-      callback(null, { name: 'Callback Nuxt.js' })
+      callback(null, { name: 'Callback Nuxt' })
     }, 10)
   }
 }
